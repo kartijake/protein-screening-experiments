@@ -1,0 +1,97 @@
+
+# ==========================================
+# Python / Backend (uv)
+# ==========================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python tooling and caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# ==========================================
+# React / Vite / TypeScript
+# ==========================================
+
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# TypeScript incremental build files
+*.tsbuildinfo
+
+# Frontend testing
+coverage/
+playwright-report/
+test-results/
+
+# ==========================================
+# Environment Variables / Secrets
+# ==========================================
+
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# ==========================================
+# IDE / Editor
+# ==========================================
+
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.sublime-workspace
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==========================================
+# Logs / Temporary Files
+# ==========================================
+
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# ==========================================
+# Local Data
+# ==========================================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# ==========================================
+# Docker
+# ==========================================
+
+docker-compose.override.yml
