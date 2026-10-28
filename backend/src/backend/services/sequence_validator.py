@@ -5,14 +5,6 @@ from dataclasses import dataclass
 class SequenceValidationError(ValueError):
     """Raised when an experiment fails sequence design rules."""
 
-
-@dataclass(frozen=True)
-class SequenceValidationResult:
-    prefix: str
-    suffix: str
-    variable_lengths: list[int]
-
-
 class SequenceValidator:
     ALLOWED_CODES = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 

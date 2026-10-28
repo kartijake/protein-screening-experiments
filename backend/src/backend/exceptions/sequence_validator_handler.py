@@ -1,4 +1,4 @@
-from fastapi import Request
+from fastapi import Request ,status
 from backend.services.sequence_validator import SequenceValidationError
 from fastapi.responses import JSONResponse
 import logging
@@ -15,7 +15,7 @@ def sequence_validator(request:Request,exc:SequenceValidationError):
     )
         
        return JSONResponse(
-               status_code=422,
+               status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
                content={
                     "error": "Amino acid sequence validation failed",
                     "details": str(exc),

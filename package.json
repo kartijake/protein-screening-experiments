@@ -1,0 +1,11 @@
+{
+  "name": "nuclera",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Karthik",
+  "type": "commonjs",
+  "scripts": {
+    "dev:backend": "uv run --project backend uvicorn backend.main:app --port 3000 --reload"
+  }
+}

@@ -40,3 +40,10 @@ class Experiment(BaseModel):
     name: str
     sequences: list[str]
     created_at: datetime
+
+
+class PaginatedExperiments(BaseModel):
+    items: list[Experiment]
+    total: int
+    limit: int
+    offset: int

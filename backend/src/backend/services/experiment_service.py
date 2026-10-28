@@ -1,4 +1,3 @@
-
 import logging
 from datetime import datetime, timezone
 from uuid import uuid4
@@ -32,5 +31,7 @@ class ExperimentService:
 
         return experiment
 
-    def list_experiments(self) -> list[Experiment]:
-        return self._experiments.copy()
+    def list_experiments(self, limit: int = 20, offset: int = 0) -> list[Experiment]:
+        total = len(self._experiments)
+        experiments = self._experiments[offset : offset + limit]
+        return {"items": experiments, "total": total, "limit": limit, "offset": offset}
