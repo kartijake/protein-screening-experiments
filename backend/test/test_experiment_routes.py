@@ -1,4 +1,3 @@
-
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -17,16 +16,13 @@ def client(monkeypatch):
         [],
     )
 
-    with TestClient(app,base_url="http://testserver/api/v1") as test_client:
+    with TestClient(app, base_url="http://testserver/api/v1") as test_client:
         yield test_client
 
 
 @pytest.fixture
 def valid_sequences():
-    return [
-        "AAAAA" + ("CD" if i % 2 == 0 else "EF") + "GGGGG"
-        for i in range(20)
-    ]
+    return ["AAAAA" + ("CD" if i % 2 == 0 else "EF") + "GGGGG" for i in range(20)]
 
 
 @pytest.fixture
@@ -45,8 +41,15 @@ def valid_fasta(valid_sequences):
     ).encode("utf-8")
 
 
+def test_health_check(client):
+    response = client.get("/health")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {"status": "healthy"}
+
 
 # POST /experiments
+
 
 @pytest.mark.parametrize(
     "invalid_name",
@@ -59,7 +62,6 @@ def valid_fasta(valid_sequences):
         " \t\n ",
     ],
 )
-
 def test_create_experiment_blank_name(
     client,
     valid_payload,
@@ -83,6 +85,7 @@ def test_create_experiment_blank_name(
         for detail in data["details"]
     )
 
+
 def test_create_experiment(client, valid_payload):
     response = client.post(
         "/experiments",
@@ -99,9 +102,7 @@ def test_create_experiment(client, valid_payload):
     assert "created_at" in data
 
 
-def test_create_experiment_invalid_count(
-    client, valid_payload
-):
+def test_create_experiment_invalid_count(client, valid_payload):
     valid_payload["sequences"].pop()
 
     response = client.post(
@@ -112,9 +113,7 @@ def test_create_experiment_invalid_count(
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
-def test_create_experiment_missing_name(
-    client, valid_sequences
-):
+def test_create_experiment_missing_name(client, valid_sequences):
     response = client.post(
         "/experiments",
         json={"sequences": valid_sequences},
@@ -155,6 +154,7 @@ def test_create_experiment_invalid_body(client, payload):
 # ----------------------------------
 # GET /experiments
 # ----------------------------------
+
 
 def test_list_experiments_empty(client):
     response = client.get("/experiments")
@@ -199,9 +199,7 @@ def test_create_then_list(client, valid_payload):
         (5, 20, 0),
     ],
 )
-def test_list_pagination(
-    client, valid_payload, limit, offset, expected_count
-):
+def test_list_pagination(client, valid_payload, limit, offset, expected_count):
     for _ in range(12):
         response = client.post(
             "/experiments",
@@ -244,12 +242,11 @@ def test_invalid_pagination(client, params):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
-
 # ----------------------------------
 # POST /experiments/uplaod
 # ----------------------------------
 
-UPLOAD_URL = "/experiments/uplaod"
+UPLOAD_URL = "/experiments/upload"
 
 
 def upload_file(client, content, name="FASTA Test"):
@@ -279,9 +276,7 @@ def test_upload_valid_fasta(client, valid_fasta):
 
 
 def test_upload_then_fetch(client, valid_fasta):
-    upload_response = upload_file(
-        client, valid_fasta
-    )
+    upload_response = upload_file(client, valid_fasta)
 
     assert upload_response.status_code == status.HTTP_200_OK
 
@@ -354,14 +349,9 @@ def test_upload_empty_file(client):
 
 
 def test_upload_invalid_sequence_count(client):
-    content = "\n".join(
-        f">SEQ_{i}\nAAAAACDGGGGG"
-        for i in range(19)
-    ).encode("utf-8")
+    content = "\n".join(f">SEQ_{i}\nAAAAACDGGGGG" for i in range(19)).encode("utf-8")
 
     response = upload_file(client, content)
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
-    assert response.json()["error"] == (
-        "Exactly 20 sequences required"
-    )
+    assert response.json()["error"] == ("Exactly 20 sequences required")

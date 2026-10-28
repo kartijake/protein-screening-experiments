@@ -6,7 +6,8 @@
   "author": "Karthik",
   "type": "commonjs",
   "scripts": {
+    "build:compose": "docker compose -f docker/compose.yaml up --build --detach",
     "dev:backend": "uv run --project backend uvicorn backend.main:app --port 3000 --reload",
-    "test:backend":"uv run --project backend pytest"
+    "test:backend": "uv run --project backend pytest"
   }
 }
