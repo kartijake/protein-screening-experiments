@@ -6,6 +6,7 @@
   "author": "Karthik",
   "type": "commonjs",
   "scripts": {
-    "dev:backend": "uv run --project backend uvicorn backend.main:app --port 3000 --reload"
+    "dev:backend": "uv run --project backend uvicorn backend.main:app --port 3000 --reload",
+    "test:backend":"uv run --project backend pytest"
   }
 }
