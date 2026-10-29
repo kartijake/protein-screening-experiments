@@ -23,6 +23,7 @@ export function CreateExperimentCard({ onCreated }: { onCreated: () => void }) {
         <input
           id="experiment-name"
           {...form.register("name")}
+          maxLength={100}
           placeholder="e.g. Kinase Inhibitor Screening"
           className="h-10 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/15"
         />

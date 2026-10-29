@@ -7,7 +7,7 @@ import { z } from "zod"
 import { api } from "@/lib/api"
 
 const formSchema = z.object({
-  name: z.string().trim().min(1, "Experiment name is required"),
+  name: z.string().trim().min(1, "Experiment name is required").max(100, "Experiment name must be 100 characters or fewer"),
   sequences: z.string(),
 })
 

@@ -84,6 +84,14 @@ def test_create_experiment_blank_name(
     )
 
 
+def test_create_experiment_name_length(client, valid_payload):
+    valid_payload["name"] = "A" * 100
+    assert client.post("/experiments", json=valid_payload).status_code == status.HTTP_201_CREATED
+
+    valid_payload["name"] = "A" * 101
+    assert client.post("/experiments", json=valid_payload).status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
 def test_create_experiment(client, valid_payload):
     response = client.post(
         "/experiments",

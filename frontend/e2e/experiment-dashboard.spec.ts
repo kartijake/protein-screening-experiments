@@ -41,6 +41,13 @@ test('validates required fields', async ({ page }) => {
   ).toBeVisible()
 })
 
+test('limits experiment names to 100 characters', async ({ page }) => {
+  const name = page.getByLabel('Experiment Name')
+  await name.fill('A'.repeat(101))
+
+  await expect(name).toHaveValue('A'.repeat(100))
+})
+
 test('validates the number of sequences', async ({ page }) => {
   await page.getByLabel('Experiment Name').fill('Test experiment')
   await page.getByLabel('Protein Sequences').fill(sequence)

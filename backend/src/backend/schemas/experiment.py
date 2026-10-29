@@ -67,6 +67,9 @@ class ExperimentCreate(BaseModel):
         if not name:
             raise ValueError("Experiment name is required")
 
+        if len(name) > 100:
+            raise ValueError("Experiment name must be 100 characters or fewer")
+
         return name
 
 

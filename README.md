@@ -27,6 +27,7 @@ The application currently supports:
 The sequence rules are:
 
 - Exactly 20 sequences per experiment.
+- Experiment names contain 1-100 characters after surrounding whitespace is removed.
 - Each sequence contains 12-100 letters and is stored in uppercase.
 - All sequences share at least five residues at the beginning and end.
 - The region between the longest common prefix and suffix contains 2-9
