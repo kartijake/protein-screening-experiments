@@ -32,8 +32,8 @@ def list_experiments(
 MAX_FILE_SIZE = 32 * 1024
 
 
-@router.post("/uplaod")
-async def uplaod_fasta(name: str = Form(...), file: UploadFile = File(...)):
+@router.post("/upload")
+async def upload_fasta(name: str = Form(...), file: UploadFile = File(...)):
     try:
         content = await file.read(MAX_FILE_SIZE + 1)
         if len(content) > MAX_FILE_SIZE:

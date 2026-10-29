@@ -1,9 +1,9 @@
-
 from dataclasses import dataclass
 
 
 class SequenceValidationError(ValueError):
     """Raised when an experiment fails sequence design rules."""
+
 
 class SequenceValidator:
     ALLOWED_CODES = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -20,24 +20,22 @@ class SequenceValidator:
         self,
         sequences: list[str],
     ) -> None:
+
+        if not isinstance(sequences, list):
+            raise SequenceValidationError("Sequences must be provided as a list")
         # 1. Validate number of sequences
         if len(sequences) != self.REQUIRED_COUNT:
             raise SequenceValidationError(
-                f"An experiment requires exactly "
-                f"{self.REQUIRED_COUNT} sequences"
+                f"An experiment requires exactly {self.REQUIRED_COUNT} sequences"
             )
 
         # 2. Validate individual sequences
         for index, sequence in enumerate(sequences, start=1):
             if not isinstance(sequence, str) or not sequence.isalpha():
-                raise SequenceValidationError(
-                    f"Sequence {index} must be a string"
-                )
+                raise SequenceValidationError(f"Sequence {index} must be a string")
 
             if not (
-                self.MIN_SEQUENCE_LENGTH
-                <= len(sequence)
-                <= self.MAX_SEQUENCE_LENGTH
+                self.MIN_SEQUENCE_LENGTH <= len(sequence) <= self.MAX_SEQUENCE_LENGTH
             ):
                 raise SequenceValidationError(
                     f"Sequence {index} must contain between "
@@ -46,10 +44,7 @@ class SequenceValidator:
                     f"Received {len(sequence)}."
                 )
 
-            if any(
-                code not in self.ALLOWED_CODES
-                for code in sequence
-            ):
+            if any(code not in self.ALLOWED_CODES for code in sequence):
                 raise SequenceValidationError(
                     f"Sequence {index} contains invalid amino acid codes"
                 )
@@ -59,8 +54,7 @@ class SequenceValidator:
 
         if prefix_length < self.MIN_COMMON_LENGTH:
             raise SequenceValidationError(
-                "Sequences must share at least 5 "
-                "amino acids at the beginning"
+                "Sequences must share at least 5 amino acids at the beginning"
             )
 
         # 4. Find longest common suffix without prefix overlap
@@ -71,31 +65,23 @@ class SequenceValidator:
 
         if suffix_length < self.MIN_COMMON_LENGTH:
             raise SequenceValidationError(
-                "Sequences must share at least 5 "
-                "amino acids at the end"
+                "Sequences must share at least 5 amino acids at the end"
             )
 
         # 5. Calculate variable region lengths
         variable_lengths = [
-            len(sequence) - prefix_length - suffix_length
-            for sequence in sequences
+            len(sequence) - prefix_length - suffix_length for sequence in sequences
         ]
 
         # 6. Validate variable regions
         for index, length in enumerate(variable_lengths, start=1):
-            if not (
-                self.MIN_VARIABLE_LENGTH
-                <= length
-                <= self.MAX_VARIABLE_LENGTH
-            ):
+            if not (self.MIN_VARIABLE_LENGTH <= length <= self.MAX_VARIABLE_LENGTH):
                 raise SequenceValidationError(
                     f"Sequence {index} has {length} amino acids "
                     "between the longest common prefix and suffix. "
                     f"Expected between {self.MIN_VARIABLE_LENGTH} "
                     f"and {self.MAX_VARIABLE_LENGTH}."
                 )
-
-
 
     @staticmethod
     def _common_prefix_length(sequences: list[str]) -> int:
@@ -105,10 +91,7 @@ class SequenceValidator:
         for index in range(shortest_length):
             character = sequences[0][index]
 
-            if any(
-                seq[index] != character
-                for seq in sequences[1:]
-            ):
+            if any(seq[index] != character for seq in sequences[1:]):
                 return index
 
         return shortest_length
@@ -125,10 +108,7 @@ class SequenceValidator:
         for offset in range(1, remaining_length + 1):
             character = sequences[0][-offset]
 
-            if any(
-                seq[-offset] != character
-                for seq in sequences[1:]
-            ):
+            if any(seq[-offset] != character for seq in sequences[1:]):
                 return offset - 1
 
         return remaining_length

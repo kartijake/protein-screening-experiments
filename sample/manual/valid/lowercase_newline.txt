@@ -1,0 +1,22 @@
+Name: Valid lowercase newline input
+Sequences:
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg
+aaaaacdggggg
+aaaaaefggggg

@@ -6,6 +6,20 @@
   "author": "Karthik",
   "type": "commonjs",
   "scripts": {
-    "dev:backend": "uv run --project backend uvicorn backend.main:app --port 3000 --reload"
+    "build:compose": "docker compose -f docker/compose.yaml up --build --detach",
+    "build:frontend": "npm --prefix frontend run build",
+    "compose:down": "docker compose -f docker/compose.yaml down",
+    "compose:logs": "docker compose -f docker/compose.yaml logs -f",
+    "compose:ps": "docker compose -f docker/compose.yaml ps",
+    "dev:backend": "uv run --project backend uvicorn backend.main:app --port 3000 --reload",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "install:playwright": "npm --prefix frontend exec playwright install",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "preview:frontend": "npm --prefix frontend run preview",
+    "setup": "npm run setup:backend && npm run setup:frontend",
+    "setup:backend": "uv sync --project backend",
+    "setup:frontend": "npm --prefix frontend ci",
+    "test:backend": "uv run --project backend pytest",
+    "test:frontend": "npm --prefix frontend test"
   }
 }
