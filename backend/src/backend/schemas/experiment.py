@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from typing import Annotated
 from uuid import UUID
@@ -15,13 +14,50 @@ AminoAcidSequence = Annotated[
 ]
 
 
+
+
+EXAMPLE_SEQUENCES = [
+    "MKTAYIAVRNDQGSKLEA",
+    "MKTAYIAFPTLWGSKLEA",
+    "MKTAYIACIMHYGSKLEA",
+    "MKTAYIADNRQEPGSKLEA",
+    "MKTAYIATWFGVLGSKLEA",
+    "MKTAYIAYHCKIMGSKLEA",
+    "MKTAYIASAPLTNGSKLEA",
+    "MKTAYIAQVGDRFEGSKLEA",
+    "MKTAYIAWMYNPITGSKLEA",
+    "MKTAYIALKHCSAVGSKLEA",
+    "MKTAYIAEDRTQGNGSKLEA",
+    "MKTAYIAGHSTAVCGSKLEA",
+    "MKTAYIAFVIYPWMLGSKLEA",
+    "MKTAYIANQTSRHKDGSKLEA",
+    "MKTAYIAAGCLEVPTGSKLEA",
+    "MKTAYIAMWYFQNRIGSKLEA",
+    "MKTAYIADEKRHSTNQGSKLEA",
+    "MKTAYIAVLIMFWYPGGSKLEA",
+    "MKTAYIACASTNQGHRGSKLEA",
+    "MKTAYIAPWIFYEDKVGSKLEA",
+]
+
 class ExperimentCreate(BaseModel):
     name: str
 
     sequences: list[AminoAcidSequence] = Field(
         min_length=20,
         max_length=20,
+        examples=[EXAMPLE_SEQUENCES]
     )
+
+    @field_validator("sequences", mode="before")
+    @classmethod
+    def normalize_sequences(cls, value):
+        if not isinstance(value, list):
+            return value
+
+        return [
+            sequence.upper() if isinstance(sequence, str) else sequence
+            for sequence in value
+        ]
 
     @field_validator("name")
     @classmethod
@@ -37,12 +73,18 @@ class ExperimentCreate(BaseModel):
 class Experiment(BaseModel):
     id: UUID
     name: str
-    sequences: list[str]
+    sequences: list[AminoAcidSequence] 
+    created_at: datetime
+
+
+class ExperimentSummary(BaseModel):
+    id: UUID
+    name: str
     created_at: datetime
 
 
 class PaginatedExperiments(BaseModel):
-    items: list[Experiment]
+    items: list[ExperimentSummary]
     total: int
     limit: int
     offset: int

@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timezone
 from uuid import uuid4
-from backend.schemas.experiment import Experiment, ExperimentCreate, PaginatedExperiments
+from backend.schemas.experiment import Experiment, ExperimentCreate, PaginatedExperiments,ExperimentSummary
 from backend.services.sequence_validator import SequenceValidator
 
 logger = logging.getLogger(__name__)
@@ -32,6 +32,5 @@ class ExperimentService:
 
     def list_experiments(self, limit: int = 20, offset: int = 0) -> PaginatedExperiments:
         total = len(self._experiments)
-        experiments = [experiment.model_copy(deep=True) for experiment in self._experiments[offset : offset + limit]]
-        # self._experiments[offset : offset + limit]
+        experiments = [ExperimentSummary.model_validate(experiment.model_dump()) for experiment in self._experiments[offset : offset + limit]]
         return {"items": experiments, "total": total, "limit": limit, "offset": offset}

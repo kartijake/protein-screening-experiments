@@ -2,7 +2,7 @@ import { Info } from "lucide-react"
 
 const guidelines = [
   "Use single-letter amino acid codes (A–Z)",
-  "Enter one sequence per line",
+  "Use a new line or comma between sequences",
   "Exactly 20 sequences per experiment",
   "Each sequence must be 12–100 amino acids",
   "Sequences need a shared prefix and suffix",

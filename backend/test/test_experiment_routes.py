@@ -49,8 +49,6 @@ def test_health_check(client):
 
 
 # POST /experiments
-
-
 @pytest.mark.parametrize(
     "invalid_name",
     [
@@ -102,6 +100,20 @@ def test_create_experiment(client, valid_payload):
     assert "created_at" in data
 
 
+def test_create_experiment_normalizes_lowercase_sequences(client, valid_payload):
+    valid_payload["sequences"] = [sequence.lower() for sequence in valid_payload["sequences"]]
+
+    response = client.post(
+        "/experiments",
+        json=valid_payload,
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json()["sequences"] == [
+        sequence.upper() for sequence in valid_payload["sequences"]
+    ]
+
+
 def test_create_experiment_invalid_count(client, valid_payload):
     valid_payload["sequences"].pop()
 
@@ -111,6 +123,20 @@ def test_create_experiment_invalid_count(client, valid_payload):
     )
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
+def test_create_experiment_sequence_validation_error(client, valid_payload):
+    valid_payload["sequences"][0] = "ZZZZZCDGGGGG"
+
+    response = client.post(
+        "/experiments",
+        json=valid_payload,
+    )
+
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+    assert response.json() == {
+        "error": "Sequences must share at least 5 amino acids at the beginning"
+    }
 
 
 def test_create_experiment_missing_name(client, valid_sequences):
@@ -151,11 +177,7 @@ def test_create_experiment_invalid_body(client, payload):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
-# ----------------------------------
 # GET /experiments
-# ----------------------------------
-
-
 def test_list_experiments_empty(client):
     response = client.get("/experiments")
 
@@ -242,10 +264,7 @@ def test_invalid_pagination(client, params):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
-# ----------------------------------
 # POST /experiments/uplaod
-# ----------------------------------
-
 UPLOAD_URL = "/experiments/upload"
 
 

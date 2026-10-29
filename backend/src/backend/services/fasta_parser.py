@@ -65,5 +65,15 @@ def parse_fasta(content: str) -> list[AminoAcidSequence]:
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="Empty sequences are not allowed",
         )
+    for index, sequence in enumerate(sequences, start=1):
+        if len(sequence) < 12:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail=(
+                    f"Sequence {index} must contain at least "
+                    "12 amino acids"
+                ),
+            )
+
 
     return sequences

@@ -6,7 +6,7 @@ import { SequenceGuidelines } from "@/components/dashboard/sequence-guidelines"
 import { useCreateExperiment } from "@/hooks/use-create-experiment"
 
 export function CreateExperimentCard({ onCreated }: { onCreated: () => void }) {
-  const { form, file, setFile, submit, submitError } = useCreateExperiment(onCreated)
+  const { form, file, setFile, submit, submitError, successMessage } = useCreateExperiment(onCreated)
   const sequences = form.watch("sequences")
 
   function clearForm() {
@@ -62,6 +62,15 @@ export function CreateExperimentCard({ onCreated }: { onCreated: () => void }) {
           Create Experiment
         </Button>
       </div>
+      {successMessage && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-5 right-5 z-50 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-medium text-white shadow-lg"
+        >
+          {successMessage}
+        </div>
+      )}
     </form>
   )
 }

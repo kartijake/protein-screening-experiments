@@ -16,7 +16,7 @@ export function SequenceEntryTabs({
   onSequencesChange,
   onFileChange,
 }: SequenceEntryTabsProps) {
-  const sequenceCount = sequences.split("\n").filter((line) => line.trim()).length
+  const sequenceCount = sequences.split(/[\r\n,]+/).filter((value) => value.trim()).length
 
   return (
     <Tabs defaultValue="manual" className="gap-0">
@@ -52,11 +52,11 @@ export function SequenceEntryTabs({
           onChange={(event) => onSequencesChange(event.target.value)}
           rows={7}
           spellCheck={false}
-          placeholder="Enter one protein sequence per line"
+          placeholder="Enter one sequence per line or separate with commas"
           className="w-full resize-y rounded-md border border-slate-200 bg-white px-4 py-3 font-mono text-sm leading-6 text-slate-700 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/15"
         />
         <p className="mt-2 text-xs text-slate-500">
-          Enter one protein sequence per line using single-letter amino acid codes.
+          Enter one protein sequence per line or separate sequences with commas.
         </p>
       </TabsContent>
 

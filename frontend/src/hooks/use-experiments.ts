@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from "react"
 
 import { api, type PaginatedExperiments } from "@/lib/api"
 
-const pageSize = 5
+const defaultPageSize = 5
 
 export function useExperiments() {
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(defaultPageSize)
   const [data, setData] = useState<PaginatedExperiments>({ items: [], total: 0, limit: pageSize, offset: 0 })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
@@ -21,7 +22,7 @@ export function useExperiments() {
     } finally {
       setIsLoading(false)
     }
-  }, [page])
+  }, [page, pageSize])
 
   useEffect(() => {
     const request = window.setTimeout(() => { void load() }, 0)
@@ -34,6 +35,13 @@ export function useExperiments() {
     setPage(nextPage)
   }
 
+  const changePageSize = (nextPageSize: number) => {
+    setIsLoading(true)
+    setError("")
+    setPageSize(nextPageSize)
+    setPage(1)
+  }
+
   const refetch = async () => {
     setIsLoading(true)
     setError("")
@@ -42,9 +50,11 @@ export function useExperiments() {
 
   return {
     ...data,
+    limit: pageSize,
     page,
     pageCount: Math.max(1, Math.ceil(data.total / pageSize)),
     setPage: changePage,
+    setLimit: changePageSize,
     isLoading,
     error,
     refetch,
